@@ -1,4 +1,5 @@
 ﻿using IniParser.Model;
+using System.Linq;
 
 namespace IniParser.Configuration
 {
@@ -60,7 +61,11 @@ namespace IniParser.Configuration
         /// </remarks>
         public string CommentString
         {
+#if NET35
+            get => StringExtentions.IsNullOrWhiteSpace(_commentString) ? ";" : _commentString;
+#else
             get => string.IsNullOrWhiteSpace(_commentString) ? ";" : _commentString;
+#endif
             set => _commentString = value?.Trim();
         }
 
@@ -73,7 +78,11 @@ namespace IniParser.Configuration
         /// </remarks>
         public string SectionStartString
         {
+#if NET35
+            get => StringExtentions.IsNullOrWhiteSpace(_sectionStartString)  ? "[" : _sectionStartString;
+#else
             get => string.IsNullOrWhiteSpace(_sectionStartString) ? "[" : _sectionStartString;
+#endif
             set => _sectionStartString = value?.Trim();
         }
 
@@ -87,7 +96,11 @@ namespace IniParser.Configuration
         /// </remarks>
         public string SectionEndString
         {
+#if NET35
+            get => StringExtentions.IsNullOrWhiteSpace(_sectionEndString) ? "]" : _sectionEndString;
+#else
             get => string.IsNullOrWhiteSpace(_sectionEndString) ? "]" : _sectionEndString;
+#endif
             set => _sectionEndString = value?.Trim();
         }
 
@@ -102,11 +115,15 @@ namespace IniParser.Configuration
         /// 
         public string PropertyAssigmentString
         {
+#if NET35
+            get => StringExtentions.IsNullOrWhiteSpace(_propertyAssigmentString) ? "=" : _propertyAssigmentString;
+#else
             get => string.IsNullOrWhiteSpace(_propertyAssigmentString) ? "=" : _propertyAssigmentString;
+#endif
             set => _propertyAssigmentString = value?.Trim();
         }
         
-        #region IDeepCloneable<T> Members
+#region IDeepCloneable<T> Members
         /// <summary>
         ///     Creates a new object that is a copy of the current instance.
         /// </summary>
@@ -117,13 +134,13 @@ namespace IniParser.Configuration
         {
             return new IniScheme(this);
         }
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         string _commentString = ";";
         string _sectionStartString = "[";
         string _sectionEndString = "]";
         string _propertyAssigmentString = "=";
-        #endregion
+#endregion
     }
 }
